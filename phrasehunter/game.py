@@ -42,11 +42,41 @@ class Game():
     self.game_over()
 
   def get_guess(self):
-    guess = input('\n\nGuess a letter! >>> ')
-    return guess
+    while True:
+      try:
+        guess = input('\n\nGuess a letter! >>> ')
+        if len(guess) > 1 or len(guess) == 0:
+          raise Exception("Please enter one letter")
+        if not guess.isalpha():
+          raise Exception("Please only enter letters")
+      except Exception as e:
+        print(e)
+        continue
+      return guess.lower()
 
   def game_over(self):
     if self.missed >= 5:
-      print("I'm sorry, you lost!")
+      print("\nI'm sorry, you lost!\n")
     else:
-      print("Good job! You won!")
+      print("\nGood job! You won!\n")
+    self.play_again()
+
+  def play_again(self):
+    while True:
+      try:
+        replay_response = input('Would you like to play again? (y/n) >>> ')
+        replay = replay_response.lower()
+        print(replay)
+        if replay == 'n':
+          print('Thanks for playing!')
+          quit()
+        elif replay == 'y':
+          self.missed = 0
+          self.active_phrase = self.get_random_phrase()
+          self.guesses = [" "]
+          self.start()
+        else:
+          raise Exception('\nPlease enter a ( y ) or a ( n )\n')
+      except Exception as e:
+        print(e)
+        continue
